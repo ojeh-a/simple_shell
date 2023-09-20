@@ -35,6 +35,7 @@ char **tokenize(char *str, const char *delim)
 
 	ret[x] = NULL;
 	return (ret);
+}
 /**
  * tokenize_input - splits a user input string into tokens with tokenize().
  * @input: the user input string to be tokenized
