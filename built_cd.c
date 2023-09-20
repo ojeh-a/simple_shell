@@ -6,6 +6,7 @@
 void shell_cd(char **args)
 {
 	char *dir = args[1];
+	int ret;
 
 	if (dir == NULL)
 	{
@@ -17,7 +18,8 @@ void shell_cd(char **args)
 		}
 	}
 
-	if (chdir(dir) == -1)
+	ret = chdir(dir);
+	if (ret == -1)
 	{
 		perror("cd");
 	}

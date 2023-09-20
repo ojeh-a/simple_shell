@@ -42,18 +42,19 @@ void free_tokens(char **ptr)
  */
 void free_path(void)
 {
-	size_t x;
-
 	if (environ != NULL)
-		return;
-	for (x = 0; environ[x] != NULL; x++)
 	{
-		if (_strncmp(environ[x], "PATH=", 5) == 0)
+		size_t x = 0;
+
+		while (environ[x] != NULL)
 		{
-			free(environ[x]);
-			environ[x] = NULL;
-			break;
+			if (_strncmp(environ[x], "PATH=", 5) == 0)
+			{
+				free(environ[x]);
+				environ[x] = NULL;
+				break;
+			}
+			x++;
 		}
-		x++;
 	}
 }

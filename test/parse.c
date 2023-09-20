@@ -58,5 +58,5 @@ char **tokenize_input(char *input)
 	tokens = tokenize(tmp, " \t\r\n\a");
 	free(tmp);
 
-	return (tokens);
+	return (tokens)
 }

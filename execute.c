@@ -22,15 +22,20 @@ int execute(char **argv)
 		_puterror("fork");
 		return (1);
 	}
-
-	else if (child_pid == 0)
+	if (child_pid == -1)
+		perror(argv[0]), free_tokens(argv), free_last_input();
+	if (child_pid == 0)
 	{
-		cmd_path = (argv[0][0] != '/') ? find_in_path(argv[0]) : argv[0];
-		if (!cmd_path || execve(cmd_path, argv, envp) == -1)
+		envp[0] = get_path();
+		envp[1] = NULL;
+		cmd_path = NULL;
+		if (argv[0][0] != '/')
+			cmd_path = find_in_path(argv[0]);
+		if (cmd_path == NULL)
+			cmd_path = argv[0];
+		if (execve(cmd_path, argv, envp) == -1)
 		{
-			perror(argv[0]);
-			free_tokens(argv);
-			free_last_input();
+			perror(argv[0]), free_tokens(argv), free_last_input();
 			exit(EXIT_FAILURE);
 		}
 	}

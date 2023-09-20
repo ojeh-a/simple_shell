@@ -22,24 +22,14 @@ char *get_input(void)
 			_puts("\n");
 			return (NULL);
 		}
-	if (nread > 0 && input[nread - 1] == '\n')
-	{
-		input[nread - 1] = '\0';
-	}
-	while (nread > 0 && isspace(input[0]))
-	{
-		input++;
-		nread--;
-	}
-	while (nread > 0 && isspace(input[nread - 1]))
-	{
-		input[nread - 1] = '\0';
-		nread--;
-	}
-	} while (nread == 0);
 
-	free(last_input);
-	last_input = strdup(input);
+		/* remove trailing newline character */
+		input[nread - 1] = '\0';
+
+	} while (input[0] == '\0' || isspace(input[0]));
+
+	/* update last_input to point to the new input */
+	last_input = input;
 	return (input);
 }
 

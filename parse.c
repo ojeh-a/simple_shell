@@ -28,13 +28,13 @@ char **tokenize(char *str, const char *delim)
 		token = strtok(NULL, delim);
 		x++;
 	}
+	/*increase the size of the array*/
 	ret = realloc(ret, (x + 1) * sizeof(char *));
 	if (!ret)
 		return (NULL);
 
 	ret[x] = NULL;
 	return (ret);
-}
 /**
  * tokenize_input - splits a user input string into tokens with tokenize().
  * @input: the user input string to be tokenized
