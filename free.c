@@ -8,11 +8,11 @@
  */
 void free_error(char **argv, char *arg)
 {
-	int x;
+	int i;
 
-	for (x = 0; argv[x]; x++)
+	for (i = 0; argv[i]; i++)
 	{
-		free(argv[x]);
+		free(argv[i]);
 	}
 	free(argv);
 	free(arg);
