@@ -30,6 +30,7 @@ char *find_in_path(char *command)
 		{
 			free_tokens(dir);
 			ret = malloc(sizeof(char) * (strlen(buf) + 1));
+			free(ret);
 			if (!ret)
 				return (NULL);
 			strcpy(ret, buf);
