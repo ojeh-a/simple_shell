@@ -30,6 +30,9 @@
 } flags;
 */
 
+/* delim.c */
+int is_delim(char c,  char  *delim);
+
 /* prompt.c */
 void prompt(void);
 
