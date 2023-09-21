@@ -1,61 +1,86 @@
 #include "shell.h"
+
 /**
- * tokenize - tokenise a string using a delimiter.
- * @str: the string to be tokenized.
- * @delim: the delimiter used to split the string.
+ * is_cmd - determines if a file is an executable command
+ * @info: the info struct
+ * @path: path to the file
  *
- * Return: an array of pointers to the tokens,
- *         or NULL if an error occurs.
+ * Return: 1 if true, 0 otherwise
  */
-char **tokenize(char *str, const char *delim)
+int is_cmd(info_t *info, char *path)
 {
-	char *token = NULL;
-	char **ret = NULL;
-	int x = 0;
+	struct stat st;
 
-	token = strtok(str, delim);
-	while (token)
+	(void)info;
+	if (!path || stat(path, &st))
+		return (0);
+
+	if (st.st_mode & S_IFREG)
 	{
-		ret = realloc(ret, sizeof(char *) * (x + 1));
-		if (ret == NULL)
-			return (NULL);
-
-		ret[x] = malloc(_strlen(token) + 1);
-		if (!(ret[x]))
-			return (NULL);
-
-		_strcpy(ret[x], token);
-		token = strtok(NULL, delim);
-		x++;
+		return (1);
 	}
-	/*increase the size of the array*/
-	ret = realloc(ret, (x + 1) * sizeof(char *));
-	if (!ret)
-		return (NULL);
-
-	ret[x] = NULL;
-	return (ret);
+	return (0);
 }
+
 /**
- * tokenize_input - splits a user input string into tokens with tokenize().
- * @input: the user input string to be tokenized
+ * dup_chars - duplicates characters
+ * @pathstr: the PATH string
+ * @start: starting index
+ * @stop: stopping index
  *
- * Return: an array of pointers to the tokens, or NULL if an error occurs
+ * Return: pointer to new buffer
  */
-char **tokenize_input(char *input)
+char *dup_chars(char *pathstr, int start, int stop)
 {
-	char **tokens = NULL;
-	char *tmp = NULL;
+	static char buf[1024];
+	int i = 0, k = 0;
 
-	tmp = _strdup(input);
-	if (tmp == NULL)
+	for (k = 0, i = start; i < stop; i++)
+		if (pathstr[i] != ':')
+			buf[k++] = pathstr[i];
+	buf[k] = 0;
+	return (buf);
+}
+
+/**
+ * find_path - finds this cmd in the PATH string
+ * @info: the info struct
+ * @pathstr: the PATH string
+ * @cmd: the cmd to find
+ *
+ * Return: full path of cmd if found or NULL
+ */
+char *find_path(info_t *info, char *pathstr, char *cmd)
+{
+	int i = 0, curr_pos = 0;
+	char *path;
+
+	if (!pathstr)
+		return (NULL);
+	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
 	{
-		_puts("Memory allocation error\n");
-		exit(EXIT_FAILURE);
+		if (is_cmd(info, cmd))
+			return (cmd);
 	}
-
-	tokens = tokenize(tmp, " \t\r\n\a");
-	free(tmp);
-
-	return (tokens);
+	while (1)
+	{
+		if (!pathstr[i] || pathstr[i] == ':')
+		{
+			path = dup_chars(pathstr, curr_pos, i);
+			if (!*path)
+				_strcat(path, cmd);
+			else
+			{
+				_strcat(path, "/");
+				_strcat(path, cmd);
+			}
+			if (is_cmd(info, path))
+				return (path);
+			if (!pathstr[i])
+				break;
+			curr_pos = i;
+		}
+		i++;
+	}
+	return (NULL);
 }
