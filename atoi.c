@@ -50,7 +50,8 @@ int _atoi(char *s)
 	int x, sign = 1, flag = 0, output;
 	unsigned int result = 0;
 
-	for (x = 0;  s[x] != '\0' && flag != 2; x++)
+	x = 0;
+	while (s[x] != '\0' && flag != 2)
 	{
 		if (s[x] == '-')
 			sign *= -1;
@@ -63,6 +64,7 @@ int _atoi(char *s)
 		}
 		else if (flag == 1)
 			flag = 2;
+		x++;
 	}
 
 	if (sign == -1)

@@ -8,14 +8,14 @@
  */
 size_t list_len(const list_t *h)
 {
-	size_t i = 0;
+	size_t x = 0;
 
 	while (h)
 	{
 		h = h->next;
-		i++;
+		x++;
 	}
-	return (i);
+	return (x);
 }
 
 /**
@@ -111,12 +111,10 @@ ssize_t get_node_index(list_t *head, list_t *node)
 {
 	size_t x = 0;
 
-	while (head)
+	for (; head; head = head->next, x++)
 	{
 		if (head == node)
 			return (x);
-		head = head->next;
-		x++;
 	}
 	return (-1);
 }

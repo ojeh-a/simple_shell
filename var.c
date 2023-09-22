@@ -81,7 +81,8 @@ int replace_alias(info_t *info)
 	list_t *node;
 	char *p;
 
-	for (x = 0; x < 10; x++)
+	x = 0;
+	while (x < 10)
 	{
 		node = node_starts_with(info->alias, info->argv[0], '=');
 		if (!node)
@@ -94,6 +95,7 @@ int replace_alias(info_t *info)
 		if (!p)
 			return (0);
 		info->argv[0] = p;
+		x++;
 	}
 	return (1);
 }
